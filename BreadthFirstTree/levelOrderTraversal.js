@@ -1,6 +1,6 @@
 class TreeNode {
-	constructor(value) {
-			this.value = value;
+	constructor(val) {
+			this.val = val;
 			this.left = null;
 			this.right = null;
 	}
@@ -18,12 +18,12 @@ function levelOrderTraversal(root) {
 	while (queue.length > 0) {
 
 			const node = queue.shift();
-			result.push(node.value);
+			result.push(node.val);
 
 			if (node.left) {
 					queue.push(node.left);
 			}
-			
+
 			if (node.right) {
 					queue.push(node.right);
 			}
