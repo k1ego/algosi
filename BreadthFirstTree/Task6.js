@@ -4,17 +4,21 @@
 // Input: root = [3,9,20,null,null,15,7]
 // Output: [[3],[9,20],[15,7]]
 
-var levelOrder = function (root) {
+var levelOrder = function(root) {
 	const result = [];
-	const queue = [[root]];
+const queue = [root];
 
-	if (!root) {
-		return result;
-	}
+if (!root) {
+	return result;
+}
 
-	while (queue.length) {
-		const node = queue.shift();
-		result.push([node.val]);
+while (queue.length > 0) {
+	const currentLevel = [];
+	const currentLength = queue.length;
+
+	for (let i = 0; i < currentLength; i++) {
+		let node = queue.shift();
+		currentLevel.push(node.val);
 
 		if (node.left) {
 			queue.push(node.left);
@@ -24,5 +28,8 @@ var levelOrder = function (root) {
 			queue.push(node.right);
 		}
 	}
-	return result;
+	result.push(currentLevel);
+}
+
+return result;
 };
