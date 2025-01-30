@@ -6,47 +6,28 @@ class TreeNode {
 	}
 }
 
-var zigzagLevelOrder = function (root) {
-	const result = [];
-	const queue = [root];
-	
-	let buff = 1;
+const isBalanced = root => {
+	let isBalanced = true;
 
-	if (!root) {
-		return result;
-	}
+	const isNodeBalanced = node => {
+		if (!node) return 0;
 
-	while (queue.length) {
-		const currentSize = queue.length;
-		const currentLevel = [];
+		const leftPortionBalance = isNodeBalanced(node.left);
+		const rightPortionBalance = isNodeBalanced(node.right);
 
-		for (let i = 0; i < currentSize; i++) {
-			const isFuckingLost = buff % 2;
-			const node = queue.shift();
+		if (!isBalanced || Math.abs(leftPortionBalance - rightPortionBalance) > 1)
+			return (isBalanced = false);
 
-			if (isFuckingLost === 1) {
-				currentLevel.push(node.val);
-			} else currentLevel.unshift(node.val);
+		return Math.max(leftPortionBalance, rightPortionBalance) + 1;
+	};
 
-			if (node.left) {
-				queue.push(node.left);
-			}
+	isNodeBalanced(root);
 
-			if (node.right) {
-				queue.push(node.right);
-			}
-		}
-		buff++
-		result.push(currentLevel);
-	}
-	return result;
+	return isBalanced;
 };
 
 // Пример использования:
-const root = new TreeNode(3);
-root.left = new TreeNode(9);
-root.right = new TreeNode(20);
-root.right.left = new TreeNode(15);
-root.right.right = new TreeNode(7);
-
-console.log(levelOrderBottom(root));
+const root = new TreeNode(5);
+root.left = new TreeNode(3);
+root.right = new TreeNode(2)
+console.log(isBalanced(root));
