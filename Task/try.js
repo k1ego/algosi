@@ -1,33 +1,10 @@
-class TreeNode {
-	constructor(val) {
-		this.val = val;
-		this.left = null;
-		this.right = null;
-	}
-}
+nums = [1,2,4,6]
+let i = 0;
+// добавить nums[i] во все массивы кроме нулевого:
 
-const isBalanced = root => {
-	let isBalanced = true;
+let array = new Array(5).fill([1]);
+array[1].push(5)
+const res = new Array(nums.length).fill(0);
+console.log(res)
 
-	const isNodeBalanced = node => {
-		if (!node) return 0;
-
-		const leftPortionBalance = isNodeBalanced(node.left);
-		const rightPortionBalance = isNodeBalanced(node.right);
-
-		if (!isBalanced || Math.abs(leftPortionBalance - rightPortionBalance) > 1)
-			return (isBalanced = false);
-
-		return Math.max(leftPortionBalance, rightPortionBalance) + 1;
-	};
-
-	isNodeBalanced(root);
-
-	return isBalanced;
-};
-
-// Пример использования:
-const root = new TreeNode(5);
-root.left = new TreeNode(3);
-root.right = new TreeNode(2)
-console.log(isBalanced(root));
+console.log(array)
