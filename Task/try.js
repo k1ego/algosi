@@ -1,10 +1,21 @@
-nums = [1,2,4,6]
-let i = 0;
-// добавить nums[i] во все массивы кроме нулевого:
+function dailyTemperatures(temperatures) {
+	const n = temperatures.length;
+	const res = new Array(n).fill(0);
 
-let array = new Array(5).fill([1]);
-array[1].push(5)
-const res = new Array(nums.length).fill(0);
-console.log(res)
+	for (let i = 0; i < n; i++) {
+			let count = 1;
+			let j = i + 1;
+			while (j < n) {
+					if (temperatures[j] > temperatures[i]) {
+							break;
+					}
+					j++;
+					count++;
+			}
+			count = (j === n) ? 0 : count;
+			res[i] = count;
+	}
+	return res;
+}
 
-console.log(array)
+console.log(dailyTemperatures([30,38,30,36,35,40,28]))
