@@ -1,8 +1,5 @@
-let a = 'alic3'
-let d = Number(a)
-let k = String(d)
-let e = a.length
-let b = Number(a)
-let c = isNaN(b)
+let s = ''
+// let a = s[0].toLowerCase()
 
-console.log(k)
+
+console.log(s.toLowerCase() === s.toUpperCase());
