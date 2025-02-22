@@ -36,6 +36,11 @@
 
 			/* SOLUTION */
 
+			button {
+				outline: none;
+				border: none;
+			}
+
 			.wrapper {
 				padding: 20px;
 				background-color: var(--gray);
@@ -58,6 +63,36 @@
 			}
 
 			.tab {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.tab__card {
+				border-radius: 16px;
+				border-color: var(--white);
+				padding: 20px;
+
+				display: flex;
+				flex-direction: column;
+				gap: 20px;
+			}
+
+			.tab__title {
+				margin: 0;
+				padding: 0;
+				font-size: var(--title-font-size);
+				font-weight: bolder;
+			}
+
+			.tab__button {
+				height: 35px;
+				border-radius: 16px;
+				padding: 10px;
+				background-color: var(--primary-color);
+
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			}
 		</style>
 	</head>
@@ -110,7 +145,7 @@
 				minWidth: 200,
 			};
 
-			function renderTab({ minWidth }) {
+			function renderTab({ minWidth, tab }) {
 				const tabDiv = document.createElement('div');
 				tabDiv.classList.add('tab');
 				tabDiv.style.flexBasis = `${minWidth}px`;
@@ -125,9 +160,25 @@
 
 				const tabTitleP = document.createElement('p');
 				tabTitleP.classList.add('tab__title');
+				tabTitleP.textContent = tab.title;
 
 				const tabButton = document.createElement('button');
 				tabButton.classList.add('tab__button');
+				tabButton.innerHTML = `<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="14"
+				height="9"
+				viewBox="0 0 14 9"
+				fill="none"
+			>
+				<path
+					d="M1 1.5L7 7.5L13 1.5"
+					stroke="#fff"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				/>
+			</svg>`;
 
 				tabCardDiv.appendChild(tabTitleP);
 				tabCardDiv.appendChild(tabButton);
@@ -148,8 +199,8 @@
 
 				rowDiv.appendChild(tabsDiv);
 
-				tabs.forEach(() => {
-					const tabElem = renderTab({ minWidth });
+				tabs.forEach((tab) => {
+					const tabElem = renderTab({ minWidth, tab });
 					tabsDiv.appendChild(tabElem);
 				});
 
@@ -168,8 +219,8 @@
 
 				for (let i = 0; i < rowsCount; i++) {
 					const row = renderRow({
-						tabs: tabs.slice(columnCount * i, columnsCount * (i + 1)),
-                        minWidth,
+						tabs: tabs.slice(columnsCount * i, columnsCount * (i + 1)),
+						minWidth,
 					});
 					WRAPPER.appendChild(row);
 				}
