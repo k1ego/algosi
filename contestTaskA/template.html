@@ -107,6 +107,32 @@
 				display: none;
 				height: 20px;
 				background-color: var(--white);
+				position: relative;
+			}
+
+			.tab__bridge_position_middle::before,
+			.tab__bridge_position_right::before {
+				content: '';
+				position: absolute;
+				border: none;
+				height: 16px;
+				width: 32px;
+				bottom: 0;
+				left: -32px;
+				border-radius: 0 0 16px 0;
+				box-shadow: 16px 0 0 0 #fff;
+			}
+
+			.tab__bridge_position_left::after,
+			.tab__bridge_position_middle::after {
+				content: '';
+				position: absolute;
+				height: 16px;
+				width: 32px;
+				bottom: 0;
+				right: -32px;
+				border-radius: 0 0 0 16px;
+				box-shadow: -16px 0 0 0 #fff;
 			}
 
 			.tab__bridge_active {
@@ -175,7 +201,7 @@
 				minWidth: 200,
 			};
 
-			function renderTab({ minWidth, tab }) {
+			function renderTab({ minWidth, tab, tabPositionType }) {
 				const tabDiv = document.createElement('div');
 				tabDiv.classList.add('tab');
 				tabDiv.style.flexBasis = `${minWidth}px`;
@@ -187,6 +213,7 @@
 
 				const tabBridgeDiv = document.createElement('div');
 				tabBridgeDiv.classList.add('tab__bridge');
+				tabBridgeDiv.classList.add(`tab__bridge_position_${tabPositionType}`);
 
 				const tabTitleP = document.createElement('p');
 				tabTitleP.classList.add('tab__title');
@@ -216,22 +243,22 @@
 				tabButton.onclick = () => {
 					document.querySelectorAll('.tab__content_active').forEach(elem => {
 						if (elem !== tabContentElem) {
-							elem.classList.remove('tab__content_active')
+							elem.classList.remove('tab__content_active');
 						}
 					});
 					document.querySelectorAll('.tab__card_active').forEach(elem => {
 						if (elem !== tabCardDiv) {
-							elem.classList.remove('tab__card_active')
+							elem.classList.remove('tab__card_active');
 						}
 					});
 					document.querySelectorAll('.tab__button_active').forEach(elem => {
 						if (elem !== tabButton) {
-							elem.classList.remove('tab__button_active')
+							elem.classList.remove('tab__button_active');
 						}
 					});
 					document.querySelectorAll('.tab__bridge_active').forEach(elem => {
 						if (elem !== tabBridgeDiv) {
-							elem.classList.remove('tab__bridge_active')
+							elem.classList.remove('tab__bridge_active');
 						}
 					});
 
@@ -251,7 +278,7 @@
 			}
 
 			// rederRow() - поделен на 2 элемента, второй отрисовывает табы, а первый строчки при активной табе
-			function renderRow({ tabs, minWidth }) {
+			function renderRow({ tabs, minWidth, columnsCount }) {
 				const rowDiv = document.createElement('div');
 				rowDiv.classList.add('row');
 
@@ -260,14 +287,37 @@
 
 				rowDiv.appendChild(tabsDiv);
 
-				tabs.forEach(tab => {
-					const [tabElem, tabContentElem] = renderTab({ minWidth, tab });
+				tabs.forEach((tab, index) => {
+					let tabPositionType = positionType.middle;
+					if (tabs.length === 1) {
+						tabPositionType = positionType.Single;
+					} else {
+						if (index === 0) {
+							tabPositionType = positionType.Left;
+						}
+						if (index === columnsCount - 1) {
+							tabPositionType = positionType.Right;
+						}
+					}
+
+					const [tabElem, tabContentElem] = renderTab({
+						minWidth,
+						tab,
+						tabPositionType,
+					});
 					tabsDiv.appendChild(tabElem);
 					rowDiv.appendChild(tabContentElem);
 				});
 
 				return rowDiv;
 			}
+
+			const positionType = {
+				Single: 'single',
+				middle: 'middle',
+				Left: 'left',
+				Right: 'right',
+			};
 
 			function solution(tabs, minWidth) {
 				const wrapperWidth = WRAPPER.clientWidth;
@@ -283,6 +333,7 @@
 					const row = renderRow({
 						tabs: tabs.slice(columnsCount * i, columnsCount * (i + 1)),
 						minWidth,
+						columnsCount,
 					});
 					WRAPPER.appendChild(row);
 				}
