@@ -282,6 +282,13 @@
 					tabBridgeDiv.classList.toggle('tab__bridge_active');
 				};
 
+				if (tab.active) {
+					tabContentElem.classList.toggle('tab__content_active');
+					tabCardDiv.classList.toggle('tab__card_active');
+					tabButton.classList.toggle('tab__button_active');
+					tabBridgeDiv.classList.toggle('tab__bridge_active');
+				}
+
 				tabCardDiv.appendChild(tabTitleP);
 				tabCardDiv.appendChild(tabButton);
 
