@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Template</title>
+		<style>
+			:root {
+				--white: #fff;
+				--gray: #a9a9a9;
+				--primary-color: #fdcd5c;
+				--base-background: #dee;
+
+				--base-font-size: 16px;
+				--title-font-size: 18px;
+			}
+			* {
+				box-sizing: border-box;
+				font-family: Verdana, Geneva, Tahoma, sans-serif;
+			}
+			body {
+				background-color: var(gray);
+				width: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			h3 {
+				font-size: 18px;
+				line-height: 21px;
+				margin: 0;
+			}
+			span {
+				font-size: 16px;
+				line-height: 18px;
+			}
+
+			/* SOLUTION */
+
+			.wrapper {
+				padding: 20px;
+				background-color: var(--gray);
+
+				width: 100vh;
+				height: 100vh;
+
+				display: flex;
+				flex-direction: column;
+				gap: 20px;
+			}
+
+			.row {
+			}
+
+			.row__tabs {
+				display: flex;
+				flex-direction: row;
+				gap: 20px;
+			}
+
+			.tab {
+			}
+		</style>
+	</head>
+	<body>
+		<template>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="14"
+				height="9"
+				viewBox="0 0 14 9"
+				fill="none"
+			>
+				<path
+					d="M1 1.5L7 7.5L13 1.5"
+					stroke="#fff"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				/>
+			</svg>
+		</template>
+		<div class="root">
+			<div class="wrapper"></div>
+		</div>
+
+		<script>
+			const ROOT = document.querySelector('.root');
+			const WRAPPER = document.querySelector('.wrapper');
+
+			const example = window.taskData || {
+				tabs: [
+					{
+						title: 'Title 1',
+						description: 'Article 1',
+					},
+					{
+						title: 'Title 2',
+						description: 'Article 2',
+					},
+					{
+						title: 'Title 3',
+						description: 'Article 3',
+						active: true,
+					},
+					{
+						title: 'Title 4',
+						description: 'Article 4',
+					},
+				],
+				minWidth: 200,
+			};
+
+			function renderTab({ minWidth }) {
+				const tabDiv = document.createElement('div');
+				tabDiv.classList.add('tab');
+				tabDiv.style.flexBasis = `${minWidth}px`;
+				tabDiv.style.flexShrink = 0;
+				tabDiv.style.flexGrow = 1;
+
+				const tabCardDiv = document.createElement('div');
+				tabCardDiv.classList.add('tab__card');
+
+				const tabBridgeDiv = document.createElement('div');
+				tabBridgeDiv.classList.add('tab__bridge');
+
+				const tabTitleP = document.createElement('p');
+				tabTitleP.classList.add('tab__title');
+
+				const tabButton = document.createElement('button');
+				tabButton.classList.add('tab__button');
+
+				tabCardDiv.appendChild(tabTitleP);
+				tabCardDiv.appendChild(tabButton);
+
+				tabDiv.appendChild(tabBridgeDiv);
+				tabDiv.appendChild(tabCardDiv);
+
+				return tabDiv;
+			}
+
+			// rederRow() - поделен на 2 элемента, второй отрисовывает табы, а первый строчки при активной табе
+			function renderRow({ tabs, minWidth }) {
+				const rowDiv = document.createElement('div');
+				rowDiv.classList.add('row');
+
+				const tabsDiv = document.createElement('div');
+				tabsDiv.classList.add('row__tabs');
+
+				rowDiv.appendChild(tabsDiv);
+
+				tabs.forEach(() => {
+					const tabElem = renderTab({ minWidth });
+					tabsDiv.appendChild(tabElem);
+				});
+
+				return rowDiv;
+			}
+
+			function solution(tabs, minWidth) {
+				const wrapperWidth = WRAPPER.clientWidth;
+
+				const asidePaddings = 20 * 2; // на 2 тк и слева и справа
+
+				const columnsCount = Math.floor(
+					(wrapperWidth - asidePaddings + 20) / (minWidth + 20)
+				);
+				const rowsCount = Math.ceil(tabs.length / columnsCount);
+
+				for (let i = 0; i < rowsCount; i++) {
+					const row = renderRow({
+						tabs: tabs.slice(columnCount * i, columnsCount * (i + 1)),
+                        minWidth,
+					});
+					WRAPPER.appendChild(row);
+				}
+			}
+
+			solution(example.tabs, example.minWidth);
+			window.onSolutionReady && window.onSolutionReady();
+		</script>
+	</body>
+</html>
