@@ -45,7 +45,6 @@
 				padding: 20px;
 				background-color: var(--gray);
 
-				width: 100vh;
 				height: 100vh;
 
 				display: flex;
@@ -69,7 +68,7 @@
 
 			.tab__card {
 				border-radius: 16px;
-				border-color: var(--white);
+				background-color: var(--white);
 				padding: 20px;
 
 				display: flex;
@@ -199,7 +198,7 @@
 
 				rowDiv.appendChild(tabsDiv);
 
-				tabs.forEach((tab) => {
+				tabs.forEach(tab => {
 					const tabElem = renderTab({ minWidth, tab });
 					tabsDiv.appendChild(tabElem);
 				});
