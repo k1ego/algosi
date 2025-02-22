@@ -147,6 +147,16 @@
 				border-radius: 16px;
 			}
 
+			.tab__content_position_left,
+			.tab__content_position_single {
+				border-top-left-radius: 0;
+			}
+
+			.tab__content_position_right,
+			.tab__content_position_single {
+				border-top-right-radius: 0;
+			}
+
 			.tab__content_active {
 				display: block !important;
 			}
@@ -239,6 +249,10 @@
 
 				const tabContentElem = document.createElement('div');
 				tabContentElem.classList.add('tab__content');
+				tabContentElem.classList.add(
+					`tab__content_position_${tabPositionType}`
+				);
+				tabContentElem.innerText = tab.description;
 
 				tabButton.onclick = () => {
 					document.querySelectorAll('.tab__content_active').forEach(elem => {
