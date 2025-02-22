@@ -76,6 +76,11 @@
 				gap: 20px;
 			}
 
+			.tab__card_active {
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+			}
+
 			.tab__title {
 				margin: 0;
 				padding: 0;
@@ -92,6 +97,32 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
+			}
+
+			.tab__button_active svg {
+				transform: rotate(180deg);
+			}
+
+			.tab__bridge {
+				display: none;
+				height: 20px;
+				background-color: var(--white);
+			}
+
+			.tab__bridge_active {
+				display: block !important;
+			}
+
+			.tab__content {
+				display: none;
+
+				padding: 20px;
+				background-color: var(--white);
+				border-radius: 16px;
+			}
+
+			.tab__content_active {
+				display: block !important;
 			}
 		</style>
 	</head>
@@ -179,13 +210,44 @@
 				/>
 			</svg>`;
 
+				const tabContentElem = document.createElement('div');
+				tabContentElem.classList.add('tab__content');
+
+				tabButton.onclick = () => {
+					document.querySelectorAll('.tab__content_active').forEach(elem => {
+						if (elem !== tabContentElem) {
+							elem.classList.remove('tab__content_active')
+						}
+					});
+					document.querySelectorAll('.tab__card_active').forEach(elem => {
+						if (elem !== tabCardDiv) {
+							elem.classList.remove('tab__card_active')
+						}
+					});
+					document.querySelectorAll('.tab__button_active').forEach(elem => {
+						if (elem !== tabButton) {
+							elem.classList.remove('tab__button_active')
+						}
+					});
+					document.querySelectorAll('.tab__bridge_active').forEach(elem => {
+						if (elem !== tabBridgeDiv) {
+							elem.classList.remove('tab__bridge_active')
+						}
+					});
+
+					tabContentElem.classList.toggle('tab__content_active');
+					tabCardDiv.classList.toggle('tab__card_active');
+					tabButton.classList.toggle('tab__button_active');
+					tabBridgeDiv.classList.toggle('tab__bridge_active');
+				};
+
 				tabCardDiv.appendChild(tabTitleP);
 				tabCardDiv.appendChild(tabButton);
 
-				tabDiv.appendChild(tabBridgeDiv);
 				tabDiv.appendChild(tabCardDiv);
+				tabDiv.appendChild(tabBridgeDiv);
 
-				return tabDiv;
+				return [tabDiv, tabContentElem];
 			}
 
 			// rederRow() - поделен на 2 элемента, второй отрисовывает табы, а первый строчки при активной табе
@@ -199,8 +261,9 @@
 				rowDiv.appendChild(tabsDiv);
 
 				tabs.forEach(tab => {
-					const tabElem = renderTab({ minWidth, tab });
+					const [tabElem, tabContentElem] = renderTab({ minWidth, tab });
 					tabsDiv.appendChild(tabElem);
+					rowDiv.appendChild(tabContentElem);
 				});
 
 				return rowDiv;
