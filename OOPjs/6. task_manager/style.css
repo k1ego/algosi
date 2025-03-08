@@ -22,3 +22,8 @@ th {
 td:nth-child(4) { /* Колонка с приоритетами */
 	font-weight: bold;
 }
+
+.toggle-icon {
+	cursor: pointer;
+	user-select: none;
+}
