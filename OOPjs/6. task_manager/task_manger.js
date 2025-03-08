@@ -1,10 +1,10 @@
 class Task {
-	constructor(taskName, description, priority, deadline) {
+	constructor(taskName, description, priority, deadline, completed) {
 		this.title = taskName;
 		this.description = description;
 		this.priority = priority; // 1 - высокий, 2 - средний, 3 - низкий
 		this.deadline = new Date(deadline);
-		this.completed = false;
+		this.completed = completed;
 	}
 }
 
@@ -14,10 +14,17 @@ class TaskManager {
 		this.initTable();
 	}
 
-	addTask(taskName, description, priority, deadline) {
-		const newTask = new Task(taskName, description, priority, deadline);
+	addTask(taskName, description, priority, deadline, completed = false) {
+		const newTask = new Task(
+			taskName,
+			description,
+			priority,
+			deadline,
+			completed
+		);
 		this.tasks.push(newTask);
 		this.sortTasks();
+		this.saveTasks();
 		this.renderTasks();
 	}
 
@@ -54,8 +61,8 @@ class TaskManager {
 			const tr = document.createElement('tr');
 
 			const statusTd = document.createElement('td');
-			statusTd.classList.add('toggle-icon')
-			statusTd.textContent = '🛑';
+			statusTd.classList.add('toggle-icon');
+			statusTd.textContent = this.tasks[index].completed ? '✅' : '🛑';
 			statusTd.addEventListener('click', () =>
 				this.toggleTaskStatus(index, statusTd)
 			);
@@ -80,6 +87,33 @@ class TaskManager {
 	toggleTaskStatus(index, statusTd) {
 		this.tasks[index].completed = !this.tasks[index].completed;
 		statusTd.textContent = this.tasks[index].completed ? '✅' : '🛑';
+		this.saveTasks();
+	}
+
+	// Сохранение задач в localStorage
+	saveTasks() {
+		localStorage.setItem('tasks', JSON.stringify(this.tasks));
+	}
+
+	// Загрузка задач из localStorage
+	loadTasks() {
+		const data = localStorage.getItem('tasks');
+		if (data) {
+			const parsedTasks = JSON.parse(data);
+			parsedTasks.forEach(task =>
+				this.tasks.push(
+					new Task(
+						task.title,
+						task.description,
+						task.priority,
+						task.deadline,
+						task.completed
+					)
+				)
+			);
+			this.renderTasks();
+		}
+		return [];
 	}
 
 	getPriorityColor(priority) {
@@ -87,9 +121,20 @@ class TaskManager {
 	}
 }
 
+// Создаем менеджер задач
 const taskManager = new TaskManager();
-taskManager.addTask('Купить продукты', 'Молоко, хлеб, яйца', 2, '2025-03-10');
-taskManager.addTask('Сдать проект', 'Закончить отчет', 1, '2025-03-08');
-taskManager.addTask('Позвонить врачу', 'Записаться на прием', 3, '2025-03-15');
 
-taskManager.renderTasks();
+// Добавляем задачи только если localStorage пуст
+if (!localStorage.getItem('tasks')) {
+	taskManager.addTask('Купить продукты', 'Молоко, хлеб, яйца', 2, '2025-03-10');
+	taskManager.addTask('Купить продукты', 'Молоко, хлеб, яйца', 2, '2025-03-10');
+	taskManager.addTask('Сдать проект', 'Закончить отчет', 1, '2025-03-08');
+	taskManager.addTask(
+		'Позвонить врачу',
+		'Записаться на прием',
+		3,
+		'2025-03-15'
+	);
+} else {
+	taskManager.loadTasks();
+}
