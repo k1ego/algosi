@@ -100,20 +100,18 @@ class TaskManager {
 		const data = localStorage.getItem('tasks');
 		if (data) {
 			const parsedTasks = JSON.parse(data);
-			parsedTasks.forEach(task =>
-				this.tasks.push(
+			this.tasks = parsedTasks.map(
+				task =>
 					new Task(
 						task.title,
 						task.description,
 						task.priority,
-						task.deadline,
+						new Date(task.deadline),
 						task.completed
 					)
-				)
 			);
 			this.renderTasks();
 		}
-		return [];
 	}
 
 	getPriorityColor(priority) {
@@ -126,7 +124,6 @@ const taskManager = new TaskManager();
 
 // Добавляем задачи только если localStorage пуст
 if (!localStorage.getItem('tasks')) {
-	taskManager.addTask('Купить продукты', 'Молоко, хлеб, яйца', 2, '2025-03-10');
 	taskManager.addTask('Купить продукты', 'Молоко, хлеб, яйца', 2, '2025-03-10');
 	taskManager.addTask('Сдать проект', 'Закончить отчет', 1, '2025-03-08');
 	taskManager.addTask(
