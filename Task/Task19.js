@@ -16,3 +16,16 @@ function digitInNums(num) {
 }
 
 console.log(digitInNums(16))
+
+// проще
+
+function digitInNums2(num) {
+	while (num > 9) {
+		num = String(num).split('').reduce((acc, item) => {
+			return acc += +item
+		}, 0)
+	}
+	return num
+}
+
+console.log(digitInNums2(16))
